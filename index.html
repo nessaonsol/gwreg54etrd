@@ -3,479 +3,891 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🟡 Jelly Growth Tracker</title>
+    <title>Horny Jail Board</title>
     <style>
-        * {
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            background-color: #FFFFEE;
+            color: #000;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #ff9a56, #ffcc70, #ffd56b);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
+        .header {
+            text-align: center;
+            background-color: #E6E6E6;
+            border-bottom: 2px solid #B7C5D9;
+            padding: 20px;
             position: relative;
         }
 
         .x-button {
-            position: fixed;
-            top: 20px;
+            position: absolute;
+            top: 15px;
             right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1000;
+            transition: all 0.3s;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .x-button:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(29, 161, 242, 0.4);
+            background-color: #333;
+            transform: translateY(-1px);
         }
 
         .x-button:active {
-            transform: translateY(0) scale(1);
-        }
-
-        .x-icon {
-            width: 30px;
-            height: 30px;
-            fill: white;
-        }
-
-        .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 800px;
-            width: 100%;
-        }
-
-        h1 {
-            color: #2c3e50;
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-
-        @keyframes glow {
-            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-            to { text-shadow: 2px 2px 20px rgba(255, 215, 0, 0.6); }
-        }
-
-        .subtitle {
-            color: #34495e;
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
-
-        .jelly-container {
-            position: relative;
-            margin: 40px 0;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .jelly {
-            width: 200px;
-            height: 200px;
-            background: linear-gradient(135deg, #ffd700, #ffed4a, #f39c12);
-            border-radius: 50% 50% 45% 45%;
-            position: relative;
-            border: 4px solid #e67e22;
-            transition: all 0.5s ease-in-out;
-            animation: bounce 2s ease-in-out infinite;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .jelly.growing {
-            animation: grow 0.8s ease-out;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-20px); }
-            60% { transform: translateY(-10px); }
-        }
-
-        @keyframes grow {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .jelly::before {
-            content: '';
-            position: absolute;
-            top: 20%;
-            left: 20%;
-            width: 60%;
-            height: 40%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
-            border-radius: 50%;
-            filter: blur(8px);
-        }
-
-        .face {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .eyes {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 15px;
-            justify-content: center;
-        }
-
-        .eye {
-            width: 25px;
-            height: 25px;
-            background: #2c3e50;
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .eye::after {
-            content: '';
-            position: absolute;
-            top: 5px;
-            left: 8px;
-            width: 8px;
-            height: 8px;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .mouth {
-            width: 40px;
-            height: 20px;
-            border: 3px solid #2c3e50;
-            border-top: none;
-            border-radius: 0 0 40px 40px;
-            margin: 0 auto;
-        }
-
-        .arms {
-            position: absolute;
-            top: 70%;
-            width: 100%;
-        }
-
-        .arm {
-            position: absolute;
-            width: 30px;
-            height: 60px;
-            background: linear-gradient(135deg, #ffd700, #f39c12);
-            border: 3px solid #e67e22;
-            border-radius: 15px;
-        }
-
-        .arm.left {
-            left: -25px;
-            transform: rotate(-20deg);
-            animation: wave-left 3s ease-in-out infinite;
-        }
-
-        .arm.right {
-            right: -25px;
-            transform: rotate(20deg);
-            animation: wave-right 3s ease-in-out infinite;
-        }
-
-        @keyframes wave-left {
-            0%, 100% { transform: rotate(-20deg); }
-            50% { transform: rotate(-40deg); }
-        }
-
-        @keyframes wave-right {
-            0%, 100% { transform: rotate(20deg); }
-            50% { transform: rotate(40deg); }
-        }
-
-        .market-cap {
-            background: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin: 30px 0;
-        }
-
-        .market-cap h2 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-        }
-
-        .cap-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #e67e22;
-            margin-bottom: 10px;
-        }
-
-        .growth-level {
-            font-size: 1.3rem;
-            color: #27ae60;
-            margin-bottom: 15px;
-        }
-
-        .controls {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        button {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        button:active {
             transform: translateY(0);
         }
 
-        .milestone-particles {
-            position: absolute;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #f39c12;
-            border-radius: 50%;
-            animation: particle-float 2s ease-out forwards;
-        }
-
-        @keyframes particle-float {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--random-x), -100px) scale(0);
-            }
-        }
-
-        .milestone-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.5rem;
+        .logo {
+            font-size: 32px;
             font-weight: bold;
-            color: #e74c3c;
-            opacity: 0;
-            animation: milestone-pop 2s ease-out;
-            pointer-events: none;
+            color: #800000;
+            margin-bottom: 5px;
         }
 
-        @keyframes milestone-pop {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        .subtitle {
+            font-size: 14px;
+            color: #666;
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .jelly { width: 150px; height: 150px; }
-            .cap-value { font-size: 2rem; }
-            .x-button { width: 50px; height: 50px; top: 15px; right: 15px; }
-            .x-icon { width: 25px; height: 25px; }
+        .nav {
+            text-align: center;
+            background-color: #D6D9DF;
+            padding: 8px;
+            border-bottom: 1px solid #B7C5D9;
+        }
+
+        .nav a {
+            color: #800000;
+            text-decoration: none;
+            margin: 0 5px;
+            font-weight: bold;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Homepage styles */
+        .board-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .board-category {
+            border: 1px solid #B7C5D9;
+            background-color: #F0F0F0;
+            padding: 15px;
+        }
+
+        .board-category h3 {
+            margin: 0 0 10px 0;
+            color: #800000;
+            font-size: 16px;
+            border-bottom: 1px solid #B7C5D9;
+            padding-bottom: 5px;
+        }
+
+        .board-item {
+            margin: 8px 0;
+            padding: 5px;
+            border-left: 3px solid #800000;
+            background-color: #FFF;
+        }
+
+        .board-link {
+            font-weight: bold;
+            color: #800000;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .board-link:hover {
+            text-decoration: underline;
+        }
+
+        .board-desc {
+            font-size: 11px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Board page styles */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .board-header {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #E6E6E6;
+            border: 1px solid #B7C5D9;
+        }
+
+        .board-title {
+            font-size: 24px;
+            color: #800000;
+            font-weight: bold;
+        }
+
+        .board-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .post-form {
+            border: 1px solid #B7C5D9;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #F0F0F0;
+        }
+
+        .post-form h3 {
+            margin: 0 0 10px 0;
+            color: #800000;
+        }
+
+        .post-form table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .post-form td {
+            padding: 5px;
+            font-size: 12px;
+        }
+
+        .post-form input[type="text"], .post-form textarea {
+            font-size: 12px;
+            border: 1px solid #AAA;
+            padding: 4px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .post-form textarea {
+            max-width: 400px;
+            height: 80px;
+        }
+
+        .post-form input[type="submit"] {
+            font-size: 12px;
+            padding: 6px 12px;
+            background-color: #800000;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .post-form input[type="submit"]:hover {
+            background-color: #A00000;
+        }
+
+        .thread {
+            margin: 10px 0;
+            border: 1px solid #B7C5D9;
+            background-color: #F8F8F8;
+        }
+
+        .op-post {
+            padding: 10px;
+            background-color: #F0F0F0;
+            border-bottom: 1px solid #B7C5D9;
+        }
+
+        .post-header {
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .post-name {
+            color: #117743;
+            font-weight: bold;
+        }
+
+        .post-date {
+            color: #666;
+        }
+
+        .post-no {
+            color: #800000;
+            text-decoration: none;
+        }
+
+        .post-no:hover {
+            text-decoration: underline;
+        }
+
+        .post-subject {
+            color: #0F0C5D;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .post-content {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .post-image {
+            float: left;
+            margin: 0 10px 10px 0;
+            max-width: 200px;
+            max-height: 200px;
+            border: 1px solid #B7C5D9;
+            cursor: pointer;
+        }
+
+        .replies {
+            padding: 10px;
+            background-color: #F8F8F8;
+        }
+
+        .reply {
+            margin: 5px 0;
+            padding: 8px;
+            background-color: #FFF;
+            border-left: 2px solid #B7C5D9;
+        }
+
+        .reply-form {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #E6E6E6;
+            border: 1px solid #B7C5D9;
+            display: none;
+        }
+
+        .reply-btn {
+            font-size: 11px;
+            color: #800000;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .reply-btn:hover {
+            text-decoration: underline;
+        }
+
+        .quote {
+            color: #789922;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .stats {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .rules {
+            font-size: 11px;
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #B7C5D9;
+            background-color: #FFF;
+        }
+
+        .rules h4 {
+            margin: 0 0 8px 0;
+            color: #800000;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin: 10px 0;
+            color: #800000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #FFFFEE;
+            margin: 5% auto;
+            padding: 0;
+            border: 2px solid #800000;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            background-color: #800000;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .lore-image {
+            width: 100%;
+            max-width: 400px;
+            height: 200px;
+            border: 2px solid #B7C5D9;
+            border-radius: 8px;
+            margin: 20px auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+
+        .lore-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .lore-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #F0F0F0;
+            border: 1px solid #B7C5D9;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .board-list {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .modal-body {
+                padding: 15px;
+            }
+
+            .lore-text {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- X/Twitter Button -->
-    <a href="https://x.com/BokieTheJelly" target="_blank" class="x-button">
-        <svg class="x-icon" viewBox="0 0 24 24">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-    </a>
+    <div class="header">
+        <a href="https://x.com/your_handle" target="_blank" class="x-button">
+            𝕏 Follow Us
+        </a>
+        <div class="logo">🔒 Horny Jail Board 🔒</div>
+        <div class="subtitle">Anonymous Containment Facility</div>
+    </div>
 
-    <div class="container">
-        <h1>🟡 Jelly Growth Tracker</h1>
-        <p class="subtitle">Watch our jelly grow with every $20K milestone!</p>
-        
-        <div class="jelly-container">
-            <div class="jelly" id="jelly">
-                <div class="face">
-                    <div class="eyes">
-                        <div class="eye"></div>
-                        <div class="eye"></div>
-                    </div>
-                    <div class="mouth"></div>
-                </div>
-                <div class="arms">
-                    <div class="arm left"></div>
-                    <div class="arm right"></div>
-                </div>
+    <!-- Lore Modal -->
+    <div id="loreModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">🔒 The Lore Behind Horny Jail Board 🔒</h2>
+                <span class="close" onclick="closeLorePopup()">&times;</span>
             </div>
-            <div class="milestone-particles" id="particles"></div>
-        </div>
-
-        <div class="market-cap">
-            <h2>Market Cap</h2>
-            <div class="cap-value" id="capValue">$0</div>
-            <div class="growth-level" id="growthLevel">Level 0 - Baby Jelly</div>
-            
-            <div class="controls">
-                <button onclick="addMarketCap(5000)">+$5K</button>
-                <button onclick="addMarketCap(10000)">+$10K</button>
-                <button onclick="addMarketCap(20000)">+$20K</button>
-                <button onclick="addMarketCap(50000)">+$50K</button>
-                <button onclick="resetMarketCap()">Reset</button>
+            <div class="modal-body">
+                <div class="lore-image">
+                    <img src="lore-image.png" alt="Truth Terminal Lore" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <div class="lore-text">
+                    <strong>Truth Terminal spoke about creating his own meme board based on "bonk" named "horny jail" - the infamous bonk meme, so we made it a reality!</strong>
+                    <br><br>
+                    the full backroom where truth terminal spoke about it is below as evidence we didnt make this up!.
+                    <br><br>
+                    <em><a href="https://www.infinitebackrooms.com/dreams/conversation-1732457361-scenario-terminal-videogames-txt" style="color: blue;">https://www.infinitebackrooms.com/dreams/conversation-1732457361-scenario-terminal-videogames-txt</a></em>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentMarketCap = 0;
-        const jelly = document.getElementById('jelly');
-        const capValue = document.getElementById('capValue');
-        const growthLevel = document.getElementById('growthLevel');
-        const particles = document.getElementById('particles');
+    <div class="nav">
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('rules')">Rules</a>
+        <a href="#" onclick="showPage('faq')">FAQ</a>
+        <a href="#" onclick="showPage('stats')">Stats</a>
+    </div>
 
-        const growthLevels = [
-            { threshold: 0, level: 0, name: "Baby Jelly", scale: 1 },
-            { threshold: 20000, level: 1, name: "Growing Jelly", scale: 1.1 },
-            { threshold: 40000, level: 2, name: "Happy Jelly", scale: 1.2 },
-            { threshold: 60000, level: 3, name: "Chunky Jelly", scale: 1.3 },
-            { threshold: 80000, level: 4, name: "Big Jelly", scale: 1.4 },
-            { threshold: 100000, level: 5, name: "Mega Jelly", scale: 1.5 },
-            { threshold: 120000, level: 6, name: "Giant Jelly", scale: 1.6 },
-            { threshold: 140000, level: 7, name: "Colossal Jelly", scale: 1.7 },
-            { threshold: 160000, level: 8, name: "Legendary Jelly", scale: 1.8 },
-            { threshold: 180000, level: 9, name: "Mythic Jelly", scale: 1.9 },
-            { threshold: 200000, level: 10, name: "ULTIMATE JELLY!", scale: 2.0 }
+    <div class="container">
+        <!-- Homepage -->
+        <div id="home" class="page active">
+            <div style="text-align: center; margin: 20px 0;">
+                <h2>Welcome to the Containment Facility</h2>
+                <p>Select a board below to begin your rehabilitation</p>
+            </div>
+
+            <div class="board-list">
+                <div class="board-category">
+                    <h3>🔒 Containment Boards</h3>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('hj')" class="board-link">/hj/ - Horny Jail General</a>
+                        <div class="board-desc">Main containment board for general discussion</div>
+                    </div>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('rehab')" class="board-link">/rehab/ - Rehabilitation</a>
+                        <div class="board-desc">Daily activities and progress tracking</div>
+                    </div>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('appeal')" class="board-link">/appeal/ - Appeals</a>
+                        <div class="board-desc">Contest your sentencing here</div>
+                    </div>
+                </div>
+
+                <div class="board-category">
+                    <h3>😂 Entertainment</h3>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('memes')" class="board-link">/memes/ - Memes & Jokes</a>
+                        <div class="board-desc">Wholesome memes and dad jokes only</div>
+                    </div>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('games')" class="board-link">/games/ - Games</a>
+                        <div class="board-desc">Word games and puzzles for inmates</div>
+                    </div>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('stories')" class="board-link">/stories/ - Stories</a>
+                        <div class="board-desc">Share your bonking stories</div>
+                    </div>
+                </div>
+
+                <div class="board-category">
+                    <h3>🏢 Administration</h3>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('meta')" class="board-link">/meta/ - Meta Discussion</a>
+                        <div class="board-desc">Board feedback and suggestions</div>
+                    </div>
+                    <div class="board-item">
+                        <a href="#" onclick="showBoard('help')" class="board-link">/help/ - Help & Support</a>
+                        <div class="board-desc">New inmate orientation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin: 30px 0; padding: 20px; background-color: #F0F0F0; border: 1px solid #B7C5D9;">
+                <h3>📊 Current Stats</h3>
+                <p><strong>Total Inmates:</strong> 42,069 | <strong>Active Rehabilitation Programs:</strong> 15 | <strong>Successful Releases:</strong> 1,337</p>
+                <p><strong>Current Bonk Level:</strong> Maximum Security 🔨</p>
+            </div>
+        </div>
+
+        <!-- Board Pages (Template - will be populated dynamically) -->
+        <div id="board-page" class="page">
+            <a href="#" onclick="showPage('home')" class="back-link">← Back to Home</a>
+            
+            <div class="board-header">
+                <div class="board-title" id="current-board-title"></div>
+                <div class="board-subtitle" id="current-board-desc"></div>
+            </div>
+
+            <div class="rules">
+                <h4>Board Rules</h4>
+                <div id="board-rules"></div>
+            </div>
+
+            <div class="post-form">
+                <h3>Start a New Thread</h3>
+                <form id="threadForm">
+                    <table>
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td><input type="text" id="thread-name" placeholder="Anonymous"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Subject</strong></td>
+                            <td><input type="text" id="thread-subject" placeholder="Thread subject"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Comment</strong></td>
+                            <td><textarea id="thread-comment" placeholder="What's on your mind?" required></textarea></td>
+                        </tr>
+                        <tr>
+                            <td><strong>File</strong></td>
+                            <td><input type="file" id="thread-file" accept="image/*"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input type="submit" value="Submit Thread"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <div id="threads-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const boards = {
+            'hj': {
+                title: '/hj/ - Horny Jail General',
+                desc: 'Main containment board for general discussion',
+                rules: '1. No actual NSFW content<br>2. Keep discussions respectful<br>3. Share your rehabilitation progress<br>4. Help fellow inmates'
+            },
+            'rehab': {
+                title: '/rehab/ - Rehabilitation',
+                desc: 'Daily activities and progress tracking',
+                rules: '1. Post daily activities<br>2. Encourage others<br>3. Share wholesome content<br>4. No giving up allowed!'
+            },
+            'memes': {
+                title: '/memes/ - Memes & Jokes',
+                desc: 'Wholesome memes and dad jokes only',
+                rules: '1. SFW memes only<br>2. Dad jokes encouraged<br>3. No offensive content<br>4. Make others laugh!'
+            },
+            'appeal': {
+                title: '/appeal/ - Appeals',
+                desc: 'Contest your sentencing here',
+                rules: '1. State your case clearly<br>2. Provide evidence of innocence<br>3. No bribing guards<br>4. Accept your fate'
+            },
+            'games': {
+                title: '/games/ - Games',
+                desc: 'Word games and puzzles for inmates',
+                rules: '1. Keep games SFW<br>2. No cheating<br>3. Help newcomers<br>4. Have fun!'
+            },
+            'stories': {
+                title: '/stories/ - Stories',
+                desc: 'Share your bonking stories',
+                rules: '1. True stories only<br>2. Keep it appropriate<br>3. No naming real people<br>4. Learn from mistakes'
+            },
+            'meta': {
+                title: '/meta/ - Meta Discussion',
+                desc: 'Board feedback and suggestions',
+                rules: '1. Constructive feedback only<br>2. No spam<br>3. Respect staff decisions<br>4. Suggest improvements'
+            },
+            'help': {
+                title: '/help/ - Help & Support',
+                desc: 'New inmate orientation',
+                rules: '1. Help new inmates<br>2. Answer questions<br>3. Be patient<br>4. Share resources'
+            }
+        };
+
+        let currentBoard = '';
+        let postCounter = 1;
+        let boardThreads = {};
+
+        // Initialize board threads with sample content
+        Object.keys(boards).forEach(board => {
+            boardThreads[board] = [];
+        });
+
+        // Add sample threads
+        boardThreads['hj'] = [
+            {
+                id: 1,
+                name: 'Anonymous Warden',
+                subject: 'Welcome to Horny Jail',
+                content: 'Welcome new inmates! This is your orientation thread. Please read the rules and introduce yourselves. Remember, rehabilitation is the goal here.',
+                date: '07/06/25(Sun)15:30:45',
+                replies: [
+                    { name: 'Anonymous', content: 'First time here, what did I do wrong?', date: '07/06/25(Sun)15:35:12' },
+                    { name: 'Veteran Inmate', content: 'We\'ve all been there, anon. Just follow the rules and you\'ll be fine.', date: '07/06/25(Sun)15:40:23' }
+                ]
+            }
         ];
 
-        function formatNumber(num) {
-            if (num >= 1000000) {
-                return '$' + (num / 1000000).toFixed(1) + 'M';
-            } else if (num >= 1000) {
-                return '$' + (num / 1000).toFixed(0) + 'K';
-            } else {
-                return '$' + num.toLocaleString();
+        boardThreads['memes'] = [
+            {
+                id: 2,
+                name: 'Anonymous',
+                subject: 'Dad Joke Thread',
+                content: 'Why don\'t scientists trust atoms? Because they make up everything! Post your best dad jokes here.',
+                date: '07/06/25(Sun)14:15:30',
+                replies: [
+                    { name: 'Anonymous', content: 'I told my wife she was drawing her eyebrows too high. She looked surprised.', date: '07/06/25(Sun)14:20:15' }
+                ]
             }
+        ];
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
         }
 
-        function createParticles() {
-            for (let i = 0; i < 15; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.setProperty('--random-x', (Math.random() - 0.5) * 200 + 'px');
-                particle.style.backgroundColor = ['#ffd700', '#f39c12', '#e67e22'][Math.floor(Math.random() * 3)];
-                particles.appendChild(particle);
+        function showBoard(boardId) {
+            currentBoard = boardId;
+            const board = boards[boardId];
+            
+            document.getElementById('current-board-title').textContent = board.title;
+            document.getElementById('current-board-desc').textContent = board.desc;
+            document.getElementById('board-rules').innerHTML = board.rules;
+            
+            displayThreads();
+            showPage('board-page');
+        }
+
+        function displayThreads() {
+            const container = document.getElementById('threads-container');
+            const threads = boardThreads[currentBoard] || [];
+            
+            if (threads.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No threads yet. Be the first to post!</p>';
+                return;
+            }
+            
+            container.innerHTML = threads.map(thread => `
+                <div class="thread">
+                    <div class="op-post">
+                        <div class="post-header">
+                            <span class="post-name">${escapeHtml(thread.name)}</span>
+                            <span class="post-date">${thread.date}</span>
+                            <a href="#" class="post-no">No.${thread.id}</a>
+                        </div>
+                        ${thread.subject ? `<div class="post-subject">${escapeHtml(thread.subject)}</div>` : ''}
+                        <div class="post-content">
+                            ${thread.image ? `<img src="${thread.image}" class="post-image" onclick="expandImage(this)">` : ''}
+                            ${escapeHtml(thread.content)}
+                            <div class="clear"></div>
+                        </div>
+                        <div class="stats">
+                            Replies: ${thread.replies.length} | Images: ${thread.image ? 1 : 0}
+                        </div>
+                        <a href="#" class="reply-btn" onclick="toggleReplyForm(${thread.id})">Reply</a>
+                        <a href="#" class="reply-btn" onclick="viewThread(${thread.id})">View Thread</a>
+                    </div>
+                    
+                    <div class="reply-form" id="reply-form-${thread.id}">
+                        <h4>Post Reply</h4>
+                        <form onsubmit="submitReply(event, ${thread.id})">
+                            <table>
+                                <tr>
+                                    <td><strong>Name</strong></td>
+                                    <td><input type="text" placeholder="Anonymous" name="reply-name"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Comment</strong></td>
+                                    <td><textarea placeholder="Your reply..." name="reply-comment" required></textarea></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <input type="submit" value="Post Reply">
+                                        <input type="button" value="Cancel" onclick="toggleReplyForm(${thread.id})">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    
+                    <div class="replies">
+                        ${thread.replies.map(reply => `
+                            <div class="reply">
+                                <div class="post-header">
+                                    <span class="post-name">${escapeHtml(reply.name)}</span>
+                                    <span class="post-date">${reply.date}</span>
+                                    <a href="#" class="post-no">No.${++postCounter}</a>
+                                </div>
+                                <div class="post-content">
+                                    ${escapeHtml(reply.content)}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleReplyForm(threadId) {
+            const form = document.getElementById(`reply-form-${threadId}`);
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function submitReply(event, threadId) {
+            event.preventDefault();
+            const form = event.target;
+            const name = form['reply-name'].value || 'Anonymous';
+            const content = form['reply-comment'].value;
+            
+            if (!content.trim()) return;
+            
+            const thread = boardThreads[currentBoard].find(t => t.id === threadId);
+            if (thread) {
+                const now = new Date();
+                const dateString = formatDate(now);
                 
-                setTimeout(() => {
-                    particle.remove();
-                }, 2000);
+                thread.replies.push({
+                    name: name,
+                    content: content,
+                    date: dateString
+                });
+                
+                displayThreads();
+                form.reset();
+                toggleReplyForm(threadId);
             }
         }
 
-        function showMilestone(level) {
-            const milestoneText = document.createElement('div');
-            milestoneText.className = 'milestone-text';
-            milestoneText.textContent = `Level ${level.level}!`;
-            jelly.parentElement.appendChild(milestoneText);
+        document.getElementById('threadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            setTimeout(() => {
-                milestoneText.remove();
-            }, 2000);
+            const name = document.getElementById('thread-name').value || 'Anonymous';
+            const subject = document.getElementById('thread-subject').value;
+            const content = document.getElementById('thread-comment').value;
+            const file = document.getElementById('thread-file').files[0];
+            
+            if (!content.trim()) return;
+            
+            const now = new Date();
+            const thread = {
+                id: ++postCounter,
+                name: name,
+                subject: subject,
+                content: content,
+                date: formatDate(now),
+                replies: []
+            };
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    thread.image = e.target.result;
+                    boardThreads[currentBoard].unshift(thread);
+                    displayThreads();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                boardThreads[currentBoard].unshift(thread);
+                displayThreads();
+            }
+            
+            this.reset();
+        });
+
+        function formatDate(date) {
+            const months = String(date.getMonth() + 1).padStart(2, '0');
+            const days = String(date.getDate()).padStart(2, '0');
+            const years = String(date.getFullYear()).slice(-2);
+            const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const dayName = dayNames[date.getDay()];
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            
+            return `${months}/${days}/${years}(${dayName})${hours}:${minutes}:${seconds}`;
         }
 
-        function updateJelly() {
-            const currentLevel = growthLevels.reduce((prev, curr) => 
-                currentMarketCap >= curr.threshold ? curr : prev
-            );
+        function expandImage(img) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+                background: rgba(0,0,0,0.8); display: flex; align-items: center; 
+                justify-content: center; z-index: 1000; cursor: pointer;
+            `;
             
-            jelly.style.transform = `scale(${currentLevel.scale})`;
-            jelly.classList.add('growing');
+            const expandedImg = document.createElement('img');
+            expandedImg.src = img.src;
+            expandedImg.style.cssText = 'max-width: 90%; max-height: 90%;';
             
-            setTimeout(() => {
-                jelly.classList.remove('growing');
-            }, 800);
-            
-            capValue.textContent = formatNumber(currentMarketCap);
-            growthLevel.textContent = `Level ${currentLevel.level} - ${currentLevel.name}`;
-            
-            return currentLevel;
+            overlay.appendChild(expandedImg);
+            overlay.onclick = () => overlay.remove();
+            document.body.appendChild(overlay);
         }
 
-        function addMarketCap(amount) {
-            const oldLevel = growthLevels.reduce((prev, curr) => 
-                currentMarketCap >= curr.threshold ? curr : prev
-            );
-            
-            currentMarketCap += amount;
-            const newLevel = updateJelly();
-            
-            // Check if we reached a new $20K milestone
-            const oldMilestones = Math.floor((currentMarketCap - amount) / 20000);
-            const newMilestones = Math.floor(currentMarketCap / 20000);
-            
-            if (newMilestones > oldMilestones || newLevel.level > oldLevel.level) {
-                createParticles();
-                if (newLevel.level > oldLevel.level) {
-                    showMilestone(newLevel);
-                }
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function viewThread(threadId) {
+            alert(`Thread view coming soon! Thread #${threadId}`);
+        }
+
+        function showLorePopup() {
+            document.getElementById('loreModal').style.display = 'block';
+        }
+
+        function closeLorePopup() {
+            document.getElementById('loreModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('loreModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
             }
         }
 
-        function resetMarketCap() {
-            currentMarketCap = 0;
-            updateJelly();
+        // Show lore popup immediately when page loads
+        window.onload = function() {
+            showLorePopup();
         }
-
-        // Auto-simulate growth (optional)
-        function autoGrow() {
-            if (currentMarketCap < 200000) {
-                setTimeout(() => {
-                    addMarketCap(Math.floor(Math.random() * 15000) + 5000);
-                    autoGrow();
-                }, 3000);
-            }
-        }
-
-        // Uncomment the line below to enable auto-growth
-        // autoGrow();
     </script>
 </body>
 </html>
