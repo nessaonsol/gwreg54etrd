@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🟡 Jelly Growth Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a56, #ffcc70, #ffd56b);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .x-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            text-decoration: none;
+        }
+
+        .x-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(29, 161, 242, 0.4);
+        }
+
+        .x-button:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .x-icon {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+            to { text-shadow: 2px 2px 20px rgba(255, 215, 0, 0.6); }
+        }
+
+        .subtitle {
+            color: #34495e;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .jelly-container {
+            position: relative;
+            margin: 40px 0;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .jelly {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #ffd700, #ffed4a, #f39c12);
+            border-radius: 50% 50% 45% 45%;
+            position: relative;
+            border: 4px solid #e67e22;
+            transition: all 0.5s ease-in-out;
+            animation: bounce 2s ease-in-out infinite;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .jelly.growing {
+            animation: grow 0.8s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+
+        @keyframes grow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .jelly::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            width: 60%;
+            height: 40%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+            border-radius: 50%;
+            filter: blur(8px);
+        }
+
+        .face {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .eyes {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .eye {
+            width: 25px;
+            height: 25px;
+            background: #2c3e50;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .mouth {
+            width: 40px;
+            height: 20px;
+            border: 3px solid #2c3e50;
+            border-top: none;
+            border-radius: 0 0 40px 40px;
+            margin: 0 auto;
+        }
+
+        .arms {
+            position: absolute;
+            top: 70%;
+            width: 100%;
+        }
+
+        .arm {
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffd700, #f39c12);
+            border: 3px solid #e67e22;
+            border-radius: 15px;
+        }
+
+        .arm.left {
+            left: -25px;
+            transform: rotate(-20deg);
+            animation: wave-left 3s ease-in-out infinite;
+        }
+
+        .arm.right {
+            right: -25px;
+            transform: rotate(20deg);
+            animation: wave-right 3s ease-in-out infinite;
+        }
+
+        @keyframes wave-left {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(-40deg); }
+        }
+
+        @keyframes wave-right {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(40deg); }
+        }
+
+        .market-cap {
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin: 30px 0;
+        }
+
+        .market-cap h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .cap-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+        .growth-level {
+            font-size: 1.3rem;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .milestone-particles {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f39c12;
+            border-radius: 50%;
+            animation: particle-float 2s ease-out forwards;
+        }
+
+        @keyframes particle-float {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--random-x), -100px) scale(0);
+            }
+        }
+
+        .milestone-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e74c3c;
+            opacity: 0;
+            animation: milestone-pop 2s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes milestone-pop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .jelly { width: 150px; height: 150px; }
+            .cap-value { font-size: 2rem; }
+            .x-button { width: 50px; height: 50px; top: 15px; right: 15px; }
+            .x-icon { width: 25px; height: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- X/Twitter Button -->
+    <a href="https://x.com/BokieTheJelly" target="_blank" class="x-button">
+        <svg class="x-icon" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+    </a>
+
+    <div class="container">
+        <h1>🟡 Jelly Growth Tracker</h1>
+        <p class="subtitle">Watch our jelly grow with every $20K milestone!</p>
+        
+        <div class="jelly-container">
+            <div class="jelly" id="jelly">
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye"></div>
+                        <div class="eye"></div>
+                    </div>
+                    <div class="mouth"></div>
+                </div>
+                <div class="arms">
+                    <div class="arm left"></div>
+                    <div class="arm right"></div>
+                </div>
+            </div>
+            <div class="milestone-particles" id="particles"></div>
+        </div>
+
+        <div class="market-cap">
+            <h2>Market Cap</h2>
+            <div class="cap-value" id="capValue">$0</div>
+            <div class="growth-level" id="growthLevel">Level 0 - Baby Jelly</div>
+            
+            <div class="controls">
+                <button onclick="addMarketCap(5000)">+$5K</button>
+                <button onclick="addMarketCap(10000)">+$10K</button>
+                <button onclick="addMarketCap(20000)">+$20K</button>
+                <button onclick="addMarketCap(50000)">+$50K</button>
+                <button onclick="resetMarketCap()">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMarketCap = 0;
+        const jelly = document.getElementById('jelly');
+        const capValue = document.getElementById('capValue');
+        const growthLevel = document.getElementById('growthLevel');
+        const particles = document.getElementById('particles');
+
+        const growthLevels = [
+            { threshold: 0, level: 0, name: "Baby Jelly", scale: 1 },
+            { threshold: 20000, level: 1, name: "Growing Jelly", scale: 1.1 },
+            { threshold: 40000, level: 2, name: "Happy Jelly", scale: 1.2 },
+            { threshold: 60000, level: 3, name: "Chunky Jelly", scale: 1.3 },
+            { threshold: 80000, level: 4, name: "Big Jelly", scale: 1.4 },
+            { threshold: 100000, level: 5, name: "Mega Jelly", scale: 1.5 },
+            { threshold: 120000, level: 6, name: "Giant Jelly", scale: 1.6 },
+            { threshold: 140000, level: 7, name: "Colossal Jelly", scale: 1.7 },
+            { threshold: 160000, level: 8, name: "Legendary Jelly", scale: 1.8 },
+            { threshold: 180000, level: 9, name: "Mythic Jelly", scale: 1.9 },
+            { threshold: 200000, level: 10, name: "ULTIMATE JELLY!", scale: 2.0 }
+        ];
+
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return '$' + (num / 1000000).toFixed(1) + 'M';
+            } else if (num >= 1000) {
+                return '$' + (num / 1000).toFixed(0) + 'K';
+            } else {
+                return '$' + num.toLocaleString();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.setProperty('--random-x', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.backgroundColor = ['#ffd700', '#f39c12', '#e67e22'][Math.floor(Math.random() * 3)];
+                particles.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 2000);
+            }
+        }
+
+        function showMilestone(level) {
+            const milestoneText = document.createElement('div');
+            milestoneText.className = 'milestone-text';
+            milestoneText.textContent = `Level ${level.level}!`;
+            jelly.parentElement.appendChild(milestoneText);
+            
+            setTimeout(() => {
+                milestoneText.remove();
+            }, 2000);
+        }
+
+        function updateJelly() {
+            const currentLevel = growthLevels.reduce((prev, curr) => 
+                currentMarketCap >= curr.threshold ? curr : prev
+            );
+            
+            jelly.style.transform = `scale(${currentLevel.scale})`;
+            jelly.classList.add('growing');
+            
+            setTimeout(() => {
+                jelly.classList.remove('growing');
+            }, 800);
+            
+            capValue.textContent = formatNumber(currentMarketCap);
+            growthLevel.textContent = `Level ${currentLevel.level} - ${currentLevel.name}`;
+            
+            return currentLevel;
+        }
+
+        function addMarketCap(amount) {
+            const oldLevel = growthLevels.reduce((prev, curr) => 
+                currentMarketCap >= curr.threshold ? curr : prev
+            );
+            
+            currentMarketCap += amount;
+            const newLevel = updateJelly();
+            
+            // Check if we reached a new $20K milestone
+            const oldMilestones = Math.floor((currentMarketCap - amount) / 20000);
+            const newMilestones = Math.floor(currentMarketCap / 20000);
+            
+            if (newMilestones > oldMilestones || newLevel.level > oldLevel.level) {
+                createParticles();
+                if (newLevel.level > oldLevel.level) {
+                    showMilestone(newLevel);
+                }
+            }
+        }
+
+        function resetMarketCap() {
+            currentMarketCap = 0;
+            updateJelly();
+        }
+
+        // Auto-simulate growth (optional)
+        function autoGrow() {
+            if (currentMarketCap < 200000) {
+                setTimeout(() => {
+                    addMarketCap(Math.floor(Math.random() * 15000) + 5000);
+                    autoGrow();
+                }, 3000);
+            }
+        }
+
+        // Uncomment the line below to enable auto-growth
+        // autoGrow();
+    </script>
+</body>
+</html>
